@@ -1,62 +1,130 @@
 <template>
   <div>
+    <div class="navbar-wrapper">
+      <div class="container">
+        <div class="navbar">
+          <CategoryMenu />
+          <div class="menu-btn-wrapper">
+            <a class="menu-btn">
+              <span class="menu-btn__span"></span>
+              <span class="menu-btn__span"></span>
+              <span class="menu-btn__span"></span>
+            </a>
+          </div>
+          <div class="logo-wrapper">
+            <h3 class="logo">TestList</h3>
+          </div>
+          <a href="#" class="cart-wrapper">
+            <img class="cart" src="@/static/img/cart.png" alt="cart" />
+            <div class="item-indicator-wrapper">
+              <h3 class="item-indicator">3</h3>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
     <Nuxt />
   </div>
 </template>
 
-<style>
-html {
-  font-family:
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+<script>
+import CategoryMenu from "@/components/categoryMenu";
+
+export default {};
+</script>
+
+<style lang="scss">
+body {
   box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+
+  height: 100vh;
+
+  font-family: "PT Sans", sans-serif;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
+.navbar-wrapper {
+  width: 100%;
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
+  background-color: #fff;
+  border-radius: 0px 0px 8px 8px;
+  box-shadow: 0px 4px 16px 0px rgba(#000000, 0.05);
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
+  .navbar {
+    position: relative;
+    height: 66px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+    .menu-btn-wrapper {
+      display: none;
+
+      .menu-btn {
+        width: 16px;
+
+        .menu-btn__spa {
+          content: '';
+          width: 100%;
+          height: 2px;
+          background-color: #959dad;          
+        }
+
+        transition: all 0.3s;
+      }
+
+      &:hover {
+        .menu-btn__spa {        
+          background-color: #59606d;
+        }
+      }
+      @media screen and (max-width: 1024px) {
+        display: block;
+      }
+    }
+
+    .logo-wrapper {
+      .logo {
+        font-weight: bold;
+        font-size: 22px;
+        margin: 0px;
+      }
+    }
+
+    .cart-wrapper {
+      cursor: pointer;
+      position: relative;
+
+      .cart {
+      }
+
+      .item-indicator-wrapper {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+
+        width: 12px;
+        height: 12px;
+        background-color: #959dad;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+
+        .item-indicator {
+          color: #fff;
+          font-size: 8px;
+        }
+      }
+    }
+  }
 }
 </style>
