@@ -22,6 +22,7 @@ export default {};
 <style lang="scss">
 .category-menu-wrapper {
   position: absolute;
+  z-index: 2;
   top: 100px;
   // left: 100px;
 

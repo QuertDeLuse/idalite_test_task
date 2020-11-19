@@ -1,20 +1,25 @@
 <template>
   <div>
+    <CartMenu
+      class="CartMenu"
+      :class="[cartMenuShow ? 'CartMenu_show' : 'CartMenu_hide']"
+      :cartMenuShow="cartMenuShow"
+      @hideCartMenu="cartMenuShow = $event"
+    />
     <div class="navbar-wrapper">
       <div class="container">
         <div class="navbar">
-          <CategoryMenu />
+          <CategoryMenu
+            class="CategoryMenu"
+            :class="[categoryMenuShow ? 'CategoryMenu_show' : '']"
+          />
           <div class="menu-btn-wrapper">
-            <a class="menu-btn">
-              <span class="menu-btn__span"></span>
-              <span class="menu-btn__span"></span>
-              <span class="menu-btn__span"></span>
-            </a>
+            <a @click.prevent="toggleCategoryMenu" class="menu-btn"></a>
           </div>
           <div class="logo-wrapper">
             <h3 class="logo">TestList</h3>
           </div>
-          <a href="#" class="cart-wrapper">
+          <a @click.prevent="toggleCartMenu" href="#" class="cart-wrapper">
             <img class="cart" src="@/static/img/cart.png" alt="cart" />
             <div class="item-indicator-wrapper">
               <h3 class="item-indicator">3</h3>
@@ -24,31 +29,73 @@
       </div>
     </div>
 
-    <Nuxt />
+    <Nuxt
+      class="backgoround"
+      :class="[categoryMenuShow || cartMenuShow ? 'backgoround_hide' : '']"
+    />
   </div>
 </template>
 
 <script>
 import CategoryMenu from "@/components/categoryMenu";
+import CartMenu from "@/components/cartMenu";
 
-export default {};
+export default {
+  data() {
+    return {
+      categoryMenuShow: false,
+      cartMenuShow: false,
+    };
+  },
+
+  methods: {
+    toggleCategoryMenu() {
+      this.categoryMenuShow = !this.categoryMenuShow;
+    },
+    toggleCartMenu() {
+      this.cartMenuShow = !this.cartMenuShow;
+    },
+  },
+};
 </script>
 
 <style lang="scss">
+
 body {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-
+  overflow: hidden;
   height: 100vh;
 
   font-family: "PT Sans", sans-serif;
+}
+
+.backgoround {
+  transition: all 0.3s;
+  opacity: 1;
+}
+.backgoround_hide {
+  opacity: 0.2;
 }
 
 .container {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0px 20px;
+}
+
+.CartMenu {
+  display: none;
+  transition: all 0.3s;
+}
+.CartMenu_hide {
+  animation: CartMenu_hide 0.3s;
+}
+.CartMenu_show {
+  display: block;
+  animation: CartMenu_show 0.3s;  
 }
 
 .navbar-wrapper {
@@ -65,27 +112,50 @@ body {
     justify-content: space-between;
     align-items: center;
 
+    .CategoryMenu {
+      transition: all 0.3s;
+
+      @media screen and (max-width: 1024px) {
+        // display: none;
+        left: -200px;
+        opacity: 0;
+      }
+    }
+
+    .CategoryMenu_show {
+      @media screen and (max-width: 1024px) {
+        // display: block;
+        left: 0px;
+        opacity: 1;
+      }
+    }
+
     .menu-btn-wrapper {
       display: none;
 
       .menu-btn {
+        position: relative;
         width: 16px;
+        height: 2px;
 
-        .menu-btn__spa {
-          content: '';
-          width: 100%;
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 20px;
           height: 2px;
-          background-color: #959dad;          
+          background-color: #000;
+        }
+        &::before {
+          top: -4px;
+        }
+        &::after {
+          bottom: -4px;
         }
 
         transition: all 0.3s;
       }
 
-      &:hover {
-        .menu-btn__spa {        
-          background-color: #59606d;
-        }
-      }
       @media screen and (max-width: 1024px) {
         display: block;
       }
@@ -125,6 +195,28 @@ body {
         }
       }
     }
+  }
+}
+
+@keyframes CartMenu_show {
+  0% {
+    opacity: 0;
+    right: -500px;
+  }
+  100% {
+    opacity: 1;
+    right: 0px;
+  }
+}
+
+@keyframes CartMenu_hide {
+  0% {   
+    opacity: 1;
+    right: 0px;
+  }
+  100% {
+    opacity: 0;
+    right: -500px;
   }
 }
 </style>
