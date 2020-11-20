@@ -3,37 +3,60 @@
     <div class="cart-menu">
       <h3 class="cart-menu__heading">Корзина</h3>
       <a @click="hideCartMenu" href="#" class="cart-menu__close-btn"></a>
-      <p class="cart-menu__sub-heading">Товары в корзине</p>
 
-      <div class="cart-menu__card-collection-wrapper">
-        <CardCartMenu v-for="item in items" :key="item.id" />
+      <div v-if="cartItems.length <= 0" class="cart-menu_empty">
+        <h3 class="cart-menu_empty__heading">
+          Пока что вы ничего не добавили в корзину.
+        </h3>
+        <a
+          @click.prevent="hideCartMenu"
+          href="#"
+          class="cart-menu_empty__back-btn"
+        >
+          Перейти к выбору
+        </a>
       </div>
 
-      <form action="" class="cart-menu__form">
-        <h3 class="form__heading">Оформить заказ</h3>
-        <input
-          name="name"
-          placeholder="Ваше имя"
-          type="text"
-          class="form__input"
-          required
-        />
-        <input
-          name="phone"
-          placeholder="Телефон"
-          type="text"
-          class="form__input"
-          required
-        />
-        <input
-          name="address"
-          placeholder="Адрес"
-          type="text"
-          class="form__input"
-          required
-        />
-        <button type="submit" class="form__btn">Отправить</button>
-      </form>
+      <div v-if="cartItems.length > 0" class="cart-menu_full">
+        <p class="cart-menu__sub-heading">Товары в корзине</p>
+
+        <div class="cart-menu__card-collection-wrapper">
+          <CardCartMenu
+            v-for="cartItem in cartItems"
+            :key="cartItem.id"
+            :cartItem="cartItem"
+          />
+        </div>
+
+        <form action="" class="cart-menu__form">
+          <h3 class="form__heading">Оформить заказ</h3>
+          <div class="form__input-group">
+            <input
+              name="name"
+              placeholder="Ваше имя"
+              type="text"
+              class="form__input"
+              required
+            />
+            <input
+              name="phone"
+              placeholder="Телефон"
+              type="text"
+              class="form__input"
+              required
+            />
+            <input
+              name="address"
+              placeholder="Адрес"
+              type="text"
+              class="form__input"
+              required
+            />
+          </div>
+
+          <button type="submit" class="form__btn">Отправить</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +74,13 @@ export default {
       items: ["q", "w", "e"],
     };
   },
+
+  computed: {
+    cartItems() {
+      return this.$store.getters.cartItems;
+    },
+  },
+
   methods: {
     hideCartMenu() {
       this.$emit("hideCartMenu", !this.cartMenuShow);
@@ -77,6 +107,7 @@ export default {
   .cart-menu {
     position: relative;
     padding: 52px 48px;
+
     .cart-menu__heading {
       margin: 0px;
       display: inline;
@@ -110,57 +141,94 @@ export default {
         transform: rotate(-45deg);
       }
     }
-    .cart-menu__sub-heading {
-      margin: 0px;
-      margin-top: 24px;
-      font-size: 18px;
-      color: #59606d;
-    }
 
-    .cart-menu__card-collection-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
+    .cart-menu_empty {
+      width: 100%;
 
-    .cart-menu__form {
-      margin-top: 32px;
-
-      .form__heading {
-        color: #59606d;
-        font-size: 18px;
+      .cart-menu_empty__heading {
         margin: 0px;
+        margin-top: 24px;
+        font-size: 22px;
+        color: #000;
         font-weight: normal;
       }
-      .form__input {
-        font-size: 16px;
-        padding: 15px;
-        border-radius: 8px;
-        color: #000;
-        background-color: #f8f8f8;
-        border: none;
-        margin-top: 16px;
+      .cart-menu_empty__back-btn {
+        margin-top: 24px;
+        display: block;
         width: 100%;
-
-        &::placeholder {
-          color: #959dad;
-        }
-      }
-      .form__btn {
-        margin-top: 16px;
-        padding: 15px;
-        width: 100%;
-        border-radius: 8px;
-        background-color: #1f1f1f;
+        text-align: center;
         color: #fff;
-        font-size: 16px;
-        border: none;
-        outline: none;
+        text-decoration: none;
+        background: #1f1f1f;
+        border-radius: 8px;
+        padding: 15px;
         transition: all 0.3s;
-        cursor: pointer;
 
         &:hover {
           background-color: #59606d;
+        }
+      }
+    }
+
+    .cart-menu_full {
+      .cart-menu__sub-heading {
+        margin: 0px;
+        margin-top: 24px;
+        font-size: 18px;
+        color: #59606d;
+      }
+
+      .cart-menu__card-collection-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      .cart-menu__form {       
+        margin-top: 32px;
+
+        .form__heading {
+          color: #59606d;
+          font-size: 18px;
+          margin: 0px;
+          font-weight: normal;
+        }
+        .form__input-group {
+          width: 100%;
+          .form__input {
+            box-sizing: border-box;
+            display: block;
+            font-size: 16px;
+            padding: 15px;
+            border-radius: 8px;
+            color: #000;
+            background-color: #f8f8f8;
+            border: none;
+            margin-top: 16px;
+            width: 100%;
+
+            &::placeholder {
+              color: #959dad;
+            }
+          }
+        }
+
+        .form__btn {
+          margin-top: 16px;
+          padding: 15px;
+          width: 100%;
+          border-radius: 8px;
+          background-color: #1f1f1f;
+          color: #fff;
+          font-size: 16px;
+          border: none;
+          outline: none;
+          transition: all 0.3s;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #59606d;
+          }
         }
       }
     }

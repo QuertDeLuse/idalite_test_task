@@ -2,24 +2,61 @@
   <div class="category-menu-wrapper">
     <h3 class="category-menu__heading">Каталог</h3>
     <ul class="categoty-list">
-      <li class="categoty-item">
-        <a href="#" class="categoty-item__a categoty-item_active">Рюкзаки</a>
-      </li>
-      <li class="categoty-item">
-        <a href="#" class="categoty-item__a">Футболки</a>
-      </li>
-      <li class="categoty-item">
-        <a href="#" class="categoty-item__a">Рубашки</a>
+      <li
+        v-for="category in categories"
+        :key="category.id"
+        class="categoty-item"
+      >
+        <a
+          href="#"
+          class="categoty-item__a"
+          :class="{'categoty-item_active': activeCategory.name == category.name}"
+          @click.prevent="openCategory(category)"
+          >{{ category.name }}</a
+        >
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {   
+      categoryOpened: false,
+    };
+  },
+
+  // mounted() {
+  //   this.$store.dispatch('setNewActiveCategory', this.categories[0].name);    
+  // },
+
+  computed: {
+    categories() {
+      return this.$store.getters.categories;
+    },
+    activeCategory() {
+      return this.$store.getters.activeCategory;
+    }    
+  },
+
+  methods: {
+    openCategory(category) {
+      this.$store.dispatch('setNewActiveCategory', category);
+      this.$router.push("/" + category.name);
+
+      this.$emit('categoryOpened')    
+    },
+  },
+};
 </script>
 
 <style lang="scss">
+.CategoryMenu_hide {
+  left: -200px;
+  opacity: 0;
+}
+
 .category-menu-wrapper {
   position: absolute;
   z-index: 2;

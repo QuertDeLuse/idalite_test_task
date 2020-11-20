@@ -5,11 +5,11 @@
     </div>
 
     <div class="card__text-wrapper">
-      <p class="card__name">Рюкзак Louis Vuitton Discovery</p>
-      <h3 class="card__price">150 000 ₽</h3>
+      <p class="card__name">{{ cartItem.name }}</p>
+      <h3 class="card__price">{{ cartItem.price }} ₽</h3>
       <div class="card__rating">
         <img src="@/static/img/star.png" alt="star" class="rating__img" />
-        <h3 class="rating">4.5</h3>
+        <h3 class="rating">{{ cartItem.rating }}</h3>
       </div>
     </div>
     <a href="#" class="card__trash-img-wrapper">
@@ -19,7 +19,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    cartItem: Object,
+  }
+
+};
 </script>
 
 <style lang="scss">
@@ -33,18 +38,21 @@ export default {};
   border-radius: 8px;
 
   .card__img-wrapper {
-    width: 90px;
+    width: 30%;
     height: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
 
     .main-img {
+      object-fit: cover;
+      max-width: 100%;
+      height: 100%;
     }
   }
   .card__text-wrapper {
     margin-left: 20px;
-    width: 170px;
+    width: 60%;
 
     .card__name {
       margin: 0px;
@@ -71,6 +79,7 @@ export default {};
     }
   }
   .card__trash-img-wrapper {
+    width: 10%;
     display: flex;
     align-items: center;
     justify-content: center;

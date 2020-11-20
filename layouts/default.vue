@@ -11,7 +11,8 @@
         <div class="navbar">
           <CategoryMenu
             class="CategoryMenu"
-            :class="[categoryMenuShow ? 'CategoryMenu_show' : '']"
+            :class="{CategoryMenu_show:categoryMenuShow }"
+            @categoryOpened="categoryMenuShow = false"
           />
           <div class="menu-btn-wrapper">
             <a @click.prevent="toggleCategoryMenu" class="menu-btn"></a>
@@ -41,11 +42,27 @@ import CategoryMenu from "@/components/categoryMenu";
 import CartMenu from "@/components/cartMenu";
 
 export default {
+
+  async middleware({ store }) {
+    if (store.getters.categories.length == 0) {
+      await store.dispatch('fetchNewCategories');
+    }
+  },
+
   data() {
     return {
       categoryMenuShow: false,
       cartMenuShow: false,
     };
+  },
+
+  mounted() {
+    // let idCartItems = localStorage.getItem('idCartItems')
+    // if (idCartItems != null) {
+    //   this.$store.dispatch('getCartItemFromCookies', idCartItems);
+    // }
+    // console.log(idCartItems)
+    this.$router.push('/' + this.$store.getters.activeCategory)    
   },
 
   methods: {
@@ -80,7 +97,7 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1260px;
   margin-left: auto;
   margin-right: auto;
   padding: 0px 20px;
