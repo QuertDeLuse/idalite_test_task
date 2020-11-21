@@ -68,7 +68,7 @@ export default {
   },
 
   mounted() {
-    this.$router.push("/" + this.$store.getters.activeCategory);
+    this.$router.push("/" + this.$store.getters.activeCategory.name);
   },
 
   methods: {
@@ -100,7 +100,7 @@ body {
   opacity: 1;
 }
 .backgoround_hide {
-  opacity: 0.2;
+  opacity: 0.1;
 }
 
 .container {
@@ -143,7 +143,7 @@ body {
     .CategoryMenu {
       transition: all 0.3s;
 
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 1080px) {
         // display: none;
         left: -200px;
         opacity: 0;
@@ -151,7 +151,7 @@ body {
     }
 
     .CategoryMenu_show {
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 1080px) {
         // display: block;
         left: 0px;
         opacity: 1;
@@ -184,7 +184,7 @@ body {
         transition: all 0.3s;
       }
 
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 1080px) {
         display: block;
       }
     }

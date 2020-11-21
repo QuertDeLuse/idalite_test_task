@@ -209,6 +209,7 @@ export default {
         font-weight: normal;
       }
       .cart-menu_empty__back-btn {
+        box-sizing: border-box;
         margin-top: 24px;
         display: block;
         width: 100%;
@@ -332,24 +333,12 @@ export default {
     }
   }
 
-  /* width */
-  ::-webkit-scrollbar {
-    width: 2px;
-  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
 
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    .cart-menu {
+      padding: 20px;
+    }
   }
 }
 </style>

@@ -36,7 +36,7 @@ import CardCategory from "@/components/categoryPage/cardCategory";
 export default {
   middleware({ store }) {
     if (store.getters.products.length == 0) {
-      store.dispatch('fetchNewProducts')
+      store.dispatch("fetchNewProducts");
     }
   },
 
@@ -55,9 +55,7 @@ export default {
     },
   },
 
-  mounted() {
-    
-  },
+  mounted() {},
 };
 </script>
 
@@ -75,12 +73,20 @@ export default {
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-start;
-      
+
       // overflow-y: scroll;
       // overflow-x: hidden;
-
-
     }
+  }
+
+  @media screen and (max-width: 1300px) {
+    width: 80%;
+    padding-left: 20%;
+  }
+
+  @media screen and (max-width: 1080px) {
+    width: 100%;
+    padding-left: 0%;
   }
 }
 </style>

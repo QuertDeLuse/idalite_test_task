@@ -184,5 +184,20 @@ export default {
       }
     }
   }
+
+  @media screen and (max-width: 1080px) {
+    width: 31%;
+    margin: 1%;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 48%;
+    margin: 1%;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 94%;
+    margin: 3%;
+  }
 }
 </style>
