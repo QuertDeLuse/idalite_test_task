@@ -2,16 +2,20 @@
   <div>
     <CartMenu
       class="CartMenu"
-      :class="[cartMenuShow ? 'CartMenu_show' : 'CartMenu_hide']"
-      :cartMenuShow="cartMenuShow"
-      @hideCartMenu="cartMenuShow = $event"
+      :class="{
+        DisplayCartMenu: displayCartMenu,
+        CartMenu_show: cartMenuShow,
+        CartMenu_hide: cartMenuHide,
+      }"
+      @hideCartMenu="(cartMenuShow = false),(cartMenuHide = true)"
+      @displayNoneCartMenu="(displayCartMenu = false), (cartMenuHide = false)"
     />
     <div class="navbar-wrapper">
       <div class="container">
         <div class="navbar">
           <CategoryMenu
             class="CategoryMenu"
-            :class="{CategoryMenu_show:categoryMenuShow }"
+            :class="{ CategoryMenu_show: categoryMenuShow }"
             @categoryOpened="categoryMenuShow = false"
           />
           <div class="menu-btn-wrapper">
@@ -20,10 +24,10 @@
           <div class="logo-wrapper">
             <h3 class="logo">TestList</h3>
           </div>
-          <a @click.prevent="toggleCartMenu" href="#" class="cart-wrapper">
+          <a @click.prevent="openCartMenu" href="#" class="cart-wrapper">
             <img class="cart" src="@/static/img/cart.png" alt="cart" />
-            <div class="item-indicator-wrapper">
-              <h3 class="item-indicator">3</h3>
+            <div v-if="cartItems.length > 0" class="item-indicator-wrapper">
+              <h3 class="item-indicator">{{ cartItems.length }}</h3>
             </div>
           </a>
         </div>
@@ -42,10 +46,9 @@ import CategoryMenu from "@/components/categoryMenu";
 import CartMenu from "@/components/cartMenu";
 
 export default {
-
   async middleware({ store }) {
     if (store.getters.categories.length == 0) {
-      await store.dispatch('fetchNewCategories');
+      await store.dispatch("fetchNewCategories");
     }
   },
 
@@ -53,37 +56,41 @@ export default {
     return {
       categoryMenuShow: false,
       cartMenuShow: false,
+      cartMenuHide: false,
+      displayCartMenu: false,
     };
   },
 
+  computed: {
+    cartItems() {
+      return this.$store.getters.cartItems;
+    }
+  },
+
   mounted() {
-    // let idCartItems = localStorage.getItem('idCartItems')
-    // if (idCartItems != null) {
-    //   this.$store.dispatch('getCartItemFromCookies', idCartItems);
-    // }
-    // console.log(idCartItems)
-    this.$router.push('/' + this.$store.getters.activeCategory)    
+    this.$router.push("/" + this.$store.getters.activeCategory);
   },
 
   methods: {
     toggleCategoryMenu() {
       this.categoryMenuShow = !this.categoryMenuShow;
     },
-    toggleCartMenu() {
-      this.cartMenuShow = !this.cartMenuShow;
+    openCartMenu() {
+      this.displayCartMenu = true;
+      this.cartMenuShow = true;
+      this.cartMenuHide = false;
     },
   },
 };
 </script>
 
 <style lang="scss">
-
 body {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  overflow: hidden;
-  height: 100vh;
+  // overflow: hidden;
+  // height: 100vh;
 
   font-family: "PT Sans", sans-serif;
 }
@@ -111,11 +118,15 @@ body {
   animation: CartMenu_hide 0.3s;
 }
 .CartMenu_show {
+  animation: CartMenu_show 0.3s;
+}
+.DisplayCartMenu {
   display: block;
-  animation: CartMenu_show 0.3s;  
 }
 
 .navbar-wrapper {
+  position: fixed;
+  z-index: 98;
   width: 100%;
 
   background-color: #fff;
@@ -227,7 +238,7 @@ body {
 }
 
 @keyframes CartMenu_hide {
-  0% {   
+  0% {
     opacity: 1;
     right: 0px;
   }

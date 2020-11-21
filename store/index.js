@@ -7,8 +7,11 @@ export const state = () => ({
 });
 
 export const mutations = {
-    updateCartItems(state, newCartItems) {
-        state.cartItems.push(newCartItems);
+    updateCartItems(state, newCartItem) {
+        state.cartItems.push(newCartItem);
+    },
+    updateCartItemsAll(state, newCartItems) {
+        state.cartItems = newCartItems;
     },
     updateCartItemsFromCookies(state, cartItemsFromCookies) {
         state.cartItems = cartItemsFromCookies;
@@ -29,20 +32,22 @@ export const mutations = {
 };
 
 export const actions = {
-    async addCartItem({ commit }, newCartItems) {
-        commit('updateCartItems', newCartItems);
+    async addCartItem({ commit }, newCartItem) {
+        commit('updateCartItems', newCartItem);
     },
     async getCartItemFromCookies({ commit }, cartItemsFromCookies) {
         commit('updateCartItemsFromCookies', cartItemsFromCookies);
     },
+    async changeAllCartItems({ commit }, newCartItems) {
+        commit('updateCartItemsAll', newCartItems)
+    },  
 
 
     async fetchNewCategories({ commit }) {
         await this.$axios.$get('http://front-test.idalite.com/api/product-category').then((newCategories) => {
             commit('updateCategories', newCategories);
-            commit('updateActiveCategory', 1);
+            commit('updateActiveCategory', newCategories[0]);
         })
-
     },
     async setNewActiveCategory({ commit }, newCategoty) {
         commit('updateActiveCategory', newCategoty);
@@ -50,9 +55,8 @@ export const actions = {
 
 
     async fetchNewProducts({ commit, getters }) {
-        console.log( getters.activeCategory.id)
         await this.$axios.$get('http://front-test.idalite.com/api/product?category=' + getters.activeCategory.id).then( (newProducts) => {
-            console.log(newProducts)
+            // console.log(newProducts)
             commit('updateProducts', newProducts);
         })              
     }

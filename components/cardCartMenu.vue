@@ -1,7 +1,11 @@
 <template>
   <div class="cart-menu__card-wrapper">
     <div class="card__img-wrapper">
-      <img src="@/static/img/default.jpg" alt="product" class="main-img" />
+      <img
+        :src="'http://front-test.idalite.com' + cartItem.photo"
+        alt="product"
+        class="main-img"
+      />
     </div>
 
     <div class="card__text-wrapper">
@@ -12,7 +16,7 @@
         <h3 class="rating">{{ cartItem.rating }}</h3>
       </div>
     </div>
-    <a href="#" class="card__trash-img-wrapper">
+    <a  @click.prevent="deleteItem" href="#" class="card__trash-img-wrapper">
       <img src="@/static/img/trash.svg" alt="trash" class="card__trash-img" />
     </a>
   </div>
@@ -22,8 +26,23 @@
 export default {
   props: {
     cartItem: Object,
-  }
+  },
 
+  computed: {
+    cartItems() {
+      return this.$store.getters.cartItems;
+    }
+  },
+
+  methods: {
+    deleteItem() {
+        let newCartItems = this.cartItems.filter((item) => {
+          return item.id != this.cartItem.id;
+        })
+
+        this.$store.dispatch('changeAllCartItems', newCartItems);
+    }
+  },
 };
 </script>
 

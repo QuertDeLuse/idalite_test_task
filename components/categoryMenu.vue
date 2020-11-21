@@ -42,7 +42,9 @@ export default {
 
   methods: {
     openCategory(category) {
-      this.$store.dispatch('setNewActiveCategory', category);
+      this.$store.dispatch('setNewActiveCategory', category).then(() => {
+        this.$store.dispatch('fetchNewProducts');
+      })
       this.$router.push("/" + category.name);
 
       this.$emit('categoryOpened')    
@@ -59,7 +61,7 @@ export default {
 
 .category-menu-wrapper {
   position: absolute;
-  z-index: 2;
+  z-index: 100;
   top: 100px;
   // left: 100px;
 

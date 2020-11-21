@@ -65,13 +65,8 @@
 import CardCartMenu from "@/components/cardCartMenu";
 
 export default {
-  props: {
-    cartMenuShow: Boolean,
-  },
-
   data() {
     return {
-      items: ["q", "w", "e"],
     };
   },
 
@@ -83,16 +78,22 @@ export default {
 
   methods: {
     hideCartMenu() {
-      this.$emit("hideCartMenu", !this.cartMenuShow);
+      this.$emit("hideCartMenu");
+
+      setTimeout( () => {
+         this.$emit("displayNoneCartMenu");
+      }, 250);
     },
+
+
   },
 };
 </script>
 
 <style lang="scss">
 .cart-menu-wrapper {
-  position: absolute;
-  z-index: 2;
+  position: fixed;
+  z-index: 99;
   top: 0px;
   right: 0px;
   width: 460px;
