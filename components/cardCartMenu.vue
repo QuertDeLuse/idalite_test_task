@@ -42,12 +42,16 @@ export default {
 
       this.$store.dispatch("changeAllCartItems", newCartItems);
 
-      let cartItemsToLocalStorage = [];
-      this.cartItems.forEach((item, key) => {
-        let itemToLS = `${item.id}:${item.name}:${item.price}:${item.rating}:${item.photo}`;
-        cartItemsToLocalStorage.push(itemToLS);
-      });
-      localStorage.setItem("cartItemsArray", cartItemsToLocalStorage);
+      if (this.cartItems.length <= 0) {
+        localStorage.removeItem("cartItemsArray");
+      } else {
+        let cartItemsToLocalStorage = [];
+        this.cartItems.forEach((item, key) => {
+          let itemToLS = `${item.id}:${item.name}:${item.price}:${item.rating}:${item.photo}`;
+          cartItemsToLocalStorage.push(itemToLS);
+        });
+        localStorage.setItem("cartItemsArray", cartItemsToLocalStorage);
+      }
     },
   },
 };
