@@ -4,7 +4,10 @@
       <h3 class="cart-menu__heading">Корзина</h3>
       <a @click="hideCartMenu" href="#" class="cart-menu__close-btn"></a>
 
-      <div v-if="cartItems.length <= 0" class="cart-menu_empty">
+      <div
+        v-if="cartItems.length <= 0 && succesfullSend == false"
+        class="cart-menu_empty"
+      >
         <h3 class="cart-menu_empty__heading">
           Пока что вы ничего не добавили в корзину.
         </h3>
@@ -28,7 +31,7 @@
           />
         </div>
 
-        <form action="" class="cart-menu__form">
+        <form @submit.prevent="sendCart" action="" class="cart-menu__form">
           <h3 class="form__heading">Оформить заказ</h3>
           <div class="form__input-group">
             <input
@@ -41,7 +44,9 @@
             <input
               name="phone"
               placeholder="Телефон"
-              type="text"
+              type="tel"
+              v-mask="'+7 ### ###-##-##'"
+              pattern="[\+][0-9]\s[0-9]{3}\s[0-9]{3}-[0-9]{2}-[0-9]{2}"
               class="form__input"
               required
             />
@@ -57,17 +62,61 @@
           <button type="submit" class="form__btn">Отправить</button>
         </form>
       </div>
+
+      <div v-if="succesfullSend" class="cart-menu__succesfull-send-wrapper">
+        <div class="cart-menu__succesfull-send">
+          <div class="succesfull-send__img-wrapper">
+            <img
+              src="@/static/img/ok-hand.jpg"
+              class="succesfull-send__img"
+              alt="ok-hand"
+            />
+          </div>
+          <h3 class="succesfull-send__heading">Заявка успешно отправлена</h3>
+          <p class="succesfull-send__sub-heading">
+            Вскоре наш менеджер свяжется с Вами
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mask } from "vue-the-mask";
 import CardCartMenu from "@/components/cardCartMenu";
 
 export default {
+  directives: { mask },
+
   data() {
     return {
+      succesfullSend: false,
     };
+  },
+  mounted() {
+    let cartItemsFromLocalStorage = localStorage.getItem("cartItemsArray");
+
+    let cartItemForStore = [];
+    if (cartItemsFromLocalStorage != null) {
+      let arrayOfItems = cartItemsFromLocalStorage.split(",");
+      console.log(arrayOfItems);
+
+      for (let i = 0; i < arrayOfItems.length; i++) {
+        let arrayItem = arrayOfItems[i].split(":");
+
+        let itemObj = {};
+        itemObj.id = arrayItem[0];
+        itemObj.name = arrayItem[1];
+        itemObj.price = arrayItem[2];
+        itemObj.rating = arrayItem[3];
+        itemObj.photo = arrayItem[4];
+
+        cartItemForStore.push(itemObj);
+      }
+
+      this.$store.dispatch('changeAllCartItems', cartItemForStore)
+    }
   },
 
   computed: {
@@ -79,13 +128,19 @@ export default {
   methods: {
     hideCartMenu() {
       this.$emit("hideCartMenu");
+      this.succesfullSend = false;
 
-      setTimeout( () => {
-         this.$emit("displayNoneCartMenu");
+      setTimeout(() => {
+        this.$emit("displayNoneCartMenu");
       }, 250);
     },
 
+    sendCart() {
+      this.$store.dispatch("changeAllCartItems", []);
+      this.succesfullSend = true;
 
+      localStorage.removeItem("cartItemsArray");
+    },
   },
 };
 </script>
@@ -185,7 +240,7 @@ export default {
         margin-top: 16px;
       }
 
-      .cart-menu__form {       
+      .cart-menu__form {
         margin-top: 32px;
 
         .form__heading {
@@ -230,6 +285,48 @@ export default {
           &:hover {
             background-color: #59606d;
           }
+        }
+      }
+    }
+
+    .cart-menu__succesfull-send-wrapper {
+      margin-top: 50vh;
+      transform: translateY(-100%);
+
+      .cart-menu__succesfull-send {
+        .succesfull-send__img-wrapper {
+          margin: 0px auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 80px;
+          height: 80px;
+
+          .succesfull-send__img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .succesfull-send__heading {
+          margin: 0px;
+          margin-top: 24px;
+
+          font-style: normal;
+          font-weight: bold;
+          font-size: 24px;
+          text-align: center;
+          color: #000000;
+        }
+        .succesfull-send__sub-heading {
+          margin: 0px;
+          margin-top: 2px;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 21px;
+          text-align: center;
+          color: #59606d;
         }
       }
     }

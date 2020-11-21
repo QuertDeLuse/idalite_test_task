@@ -25,10 +25,20 @@ export const mutations = {
         state.categories = newCategories;
     },
 
+
     updateProducts(state, newProducts) {
         state.products = newProducts
     },
+    sortProducts(state, sortValue) {
 
+        if (sortValue == 'цене') {
+            state.products.sort((a, b) => a.price < b.price ? -1 : 1);
+        }
+        if (sortValue == 'популярности') {
+            state.products.sort((a, b) => a.rating > b.rating ? -1 : 1);
+        }
+        
+    }
 };
 
 export const actions = {
@@ -59,7 +69,10 @@ export const actions = {
             // console.log(newProducts)
             commit('updateProducts', newProducts);
         })              
-    }
+    },
+    async sortProducts({ commit }, sortValue) {
+        commit('sortProducts', sortValue);
+    },
 };
 
 export const getters = {

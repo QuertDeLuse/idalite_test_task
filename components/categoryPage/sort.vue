@@ -41,6 +41,12 @@ export default {
     this.filterValue = this.arrayOfFilterValue[0];
   },
 
+  computed: {
+    products() {
+      return this.$store.getters.products;
+    }
+  },
+
   methods: {
     toggleAllValues() {
       this.displaySortMenu = !this.displaySortMenu;
@@ -48,6 +54,8 @@ export default {
     changeFilterValue(value) {
       this.filterValue = value;
       this.toggleAllValues();
+
+      this.$store.dispatch('sortProducts', value)
     },
   },
 };
@@ -61,7 +69,7 @@ export default {
 // }
 
 .sort-wrapper {
-  margin-top: 40px;
+  margin-top: 100px;
   position: absolute;
   display: inline;
   right: 0px;

@@ -16,7 +16,7 @@
         <h3 class="rating">{{ cartItem.rating }}</h3>
       </div>
     </div>
-    <a  @click.prevent="deleteItem" href="#" class="card__trash-img-wrapper">
+    <a @click.prevent="deleteItem" href="#" class="card__trash-img-wrapper">
       <img src="@/static/img/trash.svg" alt="trash" class="card__trash-img" />
     </a>
   </div>
@@ -31,17 +31,24 @@ export default {
   computed: {
     cartItems() {
       return this.$store.getters.cartItems;
-    }
+    },
   },
 
   methods: {
     deleteItem() {
-        let newCartItems = this.cartItems.filter((item) => {
-          return item.id != this.cartItem.id;
-        })
+      let newCartItems = this.cartItems.filter((item) => {
+        return item.id != this.cartItem.id;
+      });
 
-        this.$store.dispatch('changeAllCartItems', newCartItems);
-    }
+      this.$store.dispatch("changeAllCartItems", newCartItems);
+
+      let cartItemsToLocalStorage = [];
+      this.cartItems.forEach((item, key) => {
+        let itemToLS = `${item.id}:${item.name}:${item.price}:${item.rating}:${item.photo}`;
+        cartItemsToLocalStorage.push(itemToLS);
+      });
+      localStorage.setItem("cartItemsArray", cartItemsToLocalStorage);
+    },
   },
 };
 </script>

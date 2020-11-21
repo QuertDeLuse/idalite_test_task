@@ -63,8 +63,8 @@ export default {
 
 <style lang="scss">
 .category-page-wrapper {
-  width: 89%;
-  padding-left: 11%;
+  width: 88%;
+  padding-left: 12%;
   position: relative;
 
   .category-page__card-collection-wrapper {
